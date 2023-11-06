@@ -1,27 +1,21 @@
 import http from 'k6/http';
 import {check} from "k6";
-// import {read_yaml} from './load-yaml.js'
-import { parse } from "k6/x/yaml";
-
-import jsYaml from "js-yaml";
+import jwt from "./jsonwebtoken.js";
 const LOCAL_URL = 'http://localhost:8080/satoshisyohu/todos/retrieve'
 
 export default function () {
+    const jwtPayload = {
+        email: 'user1@example.com',
+        name: 'JWT Taro',
+    };
+    const jwtSecret = 'secret_key_goes_here';
+    const jwtOptions = {
+        algorithm: 'HS256',
+        expiresIn: '3s',
+    };
 
-    let config = jsYaml.load('domain-config.yaml','utf8')
-    console.log(config)
-    // const jwtPayload = {
-    //     email: 'user1@example.com',
-    //     name: 'JWT Taro',
-    // };
-    // const jwtSecret = 'secret_key_goes_here';
-    // const jwtOptions = {
-    //     algorithm: 'HS256',
-    //     expiresIn: '3s',
-    // };
-    //
-    // const token = jwt.sign(jwtPayload, jwtSecret, jwtOptions);
-
+    const token = jwt.sign(jwtPayload, jwtSecret, jwtOptions);
+    console.log(token)
 
     let data = {
         status: '1',
